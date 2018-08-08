@@ -44,12 +44,65 @@ void chip8::emulateCycle() {
 	// Decode & Execute
 	switch(this->opcode & 0xF000) {
 
-		// 0NNN: Calls RCA 1802 program at address NNN. Not necessary for 
-		// most ROMs. 
 		case 0x0000:
-			std::cout << "0NNN Not defined" << std:: endl;	
+			switch(opcode & 0x00FF) {
+				// 0x00E0: Clears the screen.
+				case 0x00E0:
+					//TODO
+					std::cout << "Clear screen" << std::endl;
+				break;
+				// 0x00EE: Returns from a subroutine.
+				case 0x00EE:
+					this->pc = this->stack[this->sp--];
+				break;
+			
+			}
 		break;
 
+		// 1NNN: Jumps to adress NNN.
+		case 0x1000:
+			this->pc = opcode & 0x0FFF;
+		break;
+
+		// 2NNN: Call subroutine at NNN.
+		case 0x2000:
+			this-stack[++this->sp] = this->pc;
+		break;
+
+		// 3XKK: Skip if Vx == KK
+		case 0x3000:
+			if(this->V[this->opcode & 0x0F00] == 0x00FF)
+				this->pc += 2;
+		break;
+
+		// 4XKK: Skip if Vx != KK
+		case 0x4000:
+			if(this->V[this->opcode & 0x0F00] != 0x00FF)
+				this->pc += 2;
+		break;
+
+		// 5XY0: Skip if Vx == Vy
+		case 0x5000:
+			if(this->V[this->opcode & 0x0F00] == this->V[this->opcode & 0x00F0])
+				this->pc += 2;
+		break;
+
+		// 6XKK: Set Vx = KK
+		case 0x6000:
+			this->V[this->opcode & 0x0F00] += this->opcode & 0x00FF;
+		break;
+
+		// 7XKK: ADD Vx, byte
+		case 0x7000:
+			this->V[this->opcode & 0x0F00] = this->opcode & 0x00FF;
+		break;
+
+		case 0x8000:
+			switch(opcode & 0x000F) {
+				// 8XY0: LD Vx, Vy
+				case 0x0000:
+			}
+		break;
 
 		// ANNN: Sets I to the address NNN
 		case 0xA000: 			
