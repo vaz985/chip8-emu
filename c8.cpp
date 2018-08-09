@@ -101,6 +101,14 @@ void chip8::emulateCycle() {
 			switch(opcode & 0x000F) {
 				// 8XY0: LD Vx, Vy
 				case 0x0000:
+				case 0x0001:
+				case 0x0002:
+				case 0x0003:
+				case 0x0004:
+				case 0x0005:
+				case 0x0006:
+				case 0x0007:
+				case 0x000E:
 			}
 		break;
 
